@@ -41,19 +41,38 @@ class ClienteController extends AbstractController
     /**
      * @Route("/clientes/{id}", name="getClientById", methods={"GET"})
      */
-        public function get($id):JsonResponse
-        {
+    public function get($id):JsonResponse
+    {
             $cliente = $this->clienteRepository->findOneBy(['id' => $id]);
 
             $data = [
-                'id' => $cliente->getId(),
-                'TX_NOME_CLIENTE' => $cliente->getTXNOMECLIENTE(),
-                'TX_EMAIL_CLIENTE' => $cliente->getTXEMAILCLIENTE(),
-                'NB_CPF_CNPJ' => $cliente->getNBCPFCNPJ(),
+                'id_cliente' => $cliente->getId(),
+                'nome_cliente' => $cliente->getTXNOMECLIENTE(),
+                'email_cliente' => $cliente->getTXEMAILCLIENTE(),
+                'cpf_cnpj' => $cliente->getNBCPFCNPJ(),
             ];
 
             return $this->json($data, Response::HTTP_OK);
+    }
+
+    /** 
+     * @Route("/clientes/", name="getAllClientes", methods={"GET"})
+    */
+    public function retornaTodos(): JsonResponse {
+        $clientes = $this->clienteRepository->findAll();
+        $dados = [];
+
+        foreach($clientes as $cliente) {
+            $dados[] = [
+                'id_cliente' => $cliente->getId(),
+                'nome_cliente' => $cliente->getTXNOMECLIENTE(),
+                'email_cliente' => $cliente->getTXEMAILCLIENTE(),
+                'cpf_cnpj' => $cliente->getNBCPFCNPJ(),
+            ];
         }
+
+        return new JsonResponse($dados, Response::HTTP_OK);
+    }
 
     /**
      * @Route("/", name="home", methods={"GET"})
