@@ -68,4 +68,11 @@ class ClienteRepository extends ServiceEntityRepository
 
     return $persister->load($criteria, null, null, [], null, 1, $orderBy);
     }
+
+    public function atualizaCliente(Cliente $cliente): Cliente {
+        $this->manager->persist($cliente);
+        $this->manager->flush();
+
+        return $cliente;
+    }
 }

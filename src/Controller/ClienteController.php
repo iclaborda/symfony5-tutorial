@@ -74,6 +74,25 @@ class ClienteController extends AbstractController
         return new JsonResponse($dados, Response::HTTP_OK);
     }
 
+
+    /** 
+     * @Route("/clientes/{id}", name="updateCliente", methods={"PUT"})
+    */
+    public function atualizaCliente($id, Request $request): JsonResponse {
+        $cliente = $this->clienteRepository->findOneBy(array('id' => $id));
+
+        $dados = json_decode($request->getContent(), true);
+
+        empty($dados['nome_cliente']) ? true : $cliente->setTXNOMECLIENTE($dados['nome_cliente']);
+        empty($dados['email_cliente']) ? true : $cliente->setTXEMAILCLIENTE($dados['email_cliente']);
+        empty($dados['cpj_cnpj']) ? true : $cliente->setNBCPFCNPJ($dados['cpf_cnpj']);
+
+        $clienteAtualizado = $this->clienteRepository->atualizaCliente($cliente);
+
+        return new JsonResponse($clienteAtualizado->toArray(), Response::HTTP_OK);
+
+    }
+
     /**
      * @Route("/", name="home", methods={"GET"})
      */
